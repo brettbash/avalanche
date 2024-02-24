@@ -1,0 +1,29 @@
+{
+    "name": "avalanche",
+    "version": "1.0.0",
+    "description": "Alpine utility animations built with GreenSock",
+    "main": "Avalanche.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/brettbash/avalanche.git"
+    },
+    "keywords": [
+        "gsap",
+        "avalanche",
+        "alpine",
+        "animation"
+    ],
+    "author": "brettbash",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/brettbash/avalanche/issues"
+    },
+    "homepage": "https://github.com/brettbash/avalanche#readme",
+    "devDependencies": {
+        "eslint": "^8.49.0",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-plugin-import": "^2.28.1",
+        "eslint-plugin-prettier": "^5.0.0",
+        "prettier": "^3.0.3"
+    }
+}
