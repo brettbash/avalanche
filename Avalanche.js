@@ -1,8 +1,8 @@
-import animate from '@components/avalanche/animations/Animate.js'
-import animateText from '@components/avalanche/animations/AnimateText.js'
-import draw from '@components/avalanche/animations/Draw.js'
-import magnetic from '@components/avalanche/animations/Magnetic.js'
-import revealer from '@components/avalanche/animations/Revealer.js'
+import animate from 'animations/Animate.js'
+import animateText from 'animations/AnimateText.js'
+import draw from 'animations/Draw.js'
+import magnetic from 'animations/Magnetic.js'
+import revealer from 'animations/Revealer.js'
 
 export default () => {
     Alpine.data('animate', animate)
