@@ -39,7 +39,18 @@ export default () => {
                 return
             }
             const rect = el.getBoundingClientRect()
-            return rect.top >= 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight)
+            let top
+
+            if (Alpine.store('barba').started && Alpine.store('barba').currentHeight) {
+                const pageScrolled = window.scrollY
+                const offset = Alpine.store('barba').currentHeight - pageScrolled
+                top = rect.top - offset
+            } else {
+                top = rect.top
+            }
+
+            top = Math.round(top)
+            return top >= 0 && top <= (window.innerHeight || document.documentElement.clientHeight)
         },
 
         breakpoint(width, type = 'min', dimension = 'width') {
