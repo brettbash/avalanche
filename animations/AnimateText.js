@@ -35,11 +35,29 @@ export default () => ({
         ease: 'circ.inOut',
     },
 
+    x: {
+        active: false,
+        start: '-100px',
+        end: 0,
+        duration: 0.3,
+        stagger: null,
+        ease: 'circ.inOut',
+    },
+
     yPercent: {
         active: false,
         start: 25,
         end: 0,
         duration: 0.8,
+        stagger: null,
+        ease: 'circ.inOut',
+    },
+
+    y: {
+        active: false,
+        start: '100px',
+        end: 0,
+        duration: 0.3,
         stagger: null,
         ease: 'circ.inOut',
     },
@@ -144,7 +162,7 @@ export default () => ({
                 {
                     opacity: this.opacity.end,
                     duration: this.opacity.duration,
-                    stagger: this.opacity.stagger ? this.opacity.stagger : this.stagger,
+                    stagger: this.opacity.stagger ?? this.stagger,
                     ease: this.opacity.ease,
                 },
                 'start',
@@ -161,7 +179,7 @@ export default () => ({
                     rotation: this.rotation.end,
                     duration: this.rotation.duration,
                     repeat: this.rotation.repeat,
-                    stagger: this.rotation.stagger ? this.rotation.stagger : this.stagger,
+                    stagger: this.rotation.stagger ?? this.stagger,
                     ease: this.rotation.ease,
                 },
                 'start',
@@ -177,7 +195,7 @@ export default () => ({
                 {
                     scale: this.scale.end,
                     duration: this.scale.duration,
-                    stagger: this.scale.stagger ? this.scale.stagger : this.stagger,
+                    stagger: this.scale.stagger ?? this.stagger,
                     ease: this.scale.ease,
                 },
                 'start',
@@ -193,8 +211,24 @@ export default () => ({
                 {
                     xPercent: this.xPercent.end,
                     duration: this.xPercent.duration,
-                    stagger: this.xPercent.stagger ? this.xPercent.stagger : this.stagger,
+                    stagger: this.xPercent.stagger ?? this.stagger,
                     ease: this.xPercent.ease,
+                },
+                'start',
+            )
+        }
+
+        if (this.x.active) {
+            animation.fromTo(
+                this.text,
+                {
+                    x: this.x.start,
+                },
+                {
+                    x: this.x.end,
+                    duration: this.x.duration,
+                    stagger: this.x.stagger ?? this.stagger,
+                    ease: this.x.ease,
                 },
                 'start',
             )
@@ -209,15 +243,51 @@ export default () => ({
                 {
                     yPercent: this.yPercent.end,
                     duration: this.yPercent.duration,
-                    stagger: this.yPercent.stagger ? this.yPercent.stagger : this.stagger,
+                    stagger: this.yPercent.stagger ?? this.stagger,
                     ease: this.yPercent.ease,
+                },
+                'start',
+            )
+        }
+
+        if (this.y.active) {
+            animation.fromTo(
+                this.text,
+                {
+                    y: this.y.start,
+                },
+                {
+                    y: this.y.end,
+                    duration: this.y.duration,
+                    stagger: this.y.stagger ?? this.stagger,
+                    ease: this.y.ease,
                 },
                 'start',
             )
         }
     },
 
-    // setTrigger(): avalanche.setTrigger(),
+    watch(item) {
+        this.$watch(item, value => {
+            value ? this.active() : this.inactive()
+        })
+    },
+
+    active() {
+        opacity = {
+            ...opacity,
+            start: 0,
+            end: 1,
+        }
+    },
+
+    inactive() {
+        opacity = {
+            ...opacity,
+            start: 1,
+            end: 0,
+        }
+    },
 
     setTrigger(container) {
         this.container = container
