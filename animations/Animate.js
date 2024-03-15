@@ -29,6 +29,7 @@ export default () => ({
         start: '-100px',
         end: 0,
         duration: 0.3,
+        repeat: false,
         ease: 'circ.inOut',
     },
 
@@ -37,6 +38,7 @@ export default () => ({
         start: -25,
         end: 0,
         duration: 0.3,
+        repeat: false,
         ease: 'circ.inOut',
     },
 
@@ -45,6 +47,7 @@ export default () => ({
         start: '100px',
         end: 0,
         duration: 0.3,
+        repeat: false,
         ease: 'circ.inOut',
     },
 
@@ -53,6 +56,7 @@ export default () => ({
         start: 25,
         end: 0,
         duration: 0.3,
+        repeat: false,
         ease: 'circ.inOut',
     },
 
@@ -194,6 +198,7 @@ export default () => ({
                 {
                     xPercent: this.xPercent.end,
                     duration: this.xPercent.duration,
+                    repeat: this.xPercent.repeat,
                     stagger: this.stagger,
                     ease: this.xPercent.ease,
                 },
@@ -211,6 +216,7 @@ export default () => ({
                     y: this.y.end,
                     duration: this.y.duration,
                     stagger: this.stagger,
+                    repeat: this.y.repeat,
                     ease: this.y.ease,
                 },
                 'start',
@@ -226,6 +232,7 @@ export default () => ({
                 {
                     yPercent: this.yPercent.end,
                     duration: this.yPercent.duration,
+                    repeat: this.yPercent.repeat,
                     stagger: this.stagger,
                     ease: this.yPercent.ease,
                 },
