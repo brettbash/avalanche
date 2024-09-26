@@ -33,6 +33,13 @@ export default () => {
             words: {},
         },
 
+        breakpoint(width, type = 'min', dimension = 'width') {
+            if (type === 'max') {
+                width--
+            }
+            return `(${type}-${dimension}: ${width}px)`
+        },
+
         inView(el) {
             if (!el) {
                 avalanche.error.inView()
@@ -53,11 +60,8 @@ export default () => {
             return top >= 0 && top <= (window.innerHeight || document.documentElement.clientHeight)
         },
 
-        breakpoint(width, type = 'min', dimension = 'width') {
-            if (type === 'max') {
-                width--
-            }
-            return `(${type}-${dimension}: ${width}px)`
+        isTouch() {
+            return 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/)
         },
 
         error: {

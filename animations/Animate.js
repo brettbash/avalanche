@@ -24,6 +24,22 @@ export default () => ({
         ease: 'circ.inOut',
     },
 
+    scaleX: {
+        active: false,
+        start: 1.1,
+        end: 1,
+        duration: 0.3,
+        ease: 'circ.inOut',
+    },
+
+    scaleY: {
+        active: false,
+        start: 1.1,
+        end: 1,
+        duration: 0.3,
+        ease: 'circ.inOut',
+    },
+
     x: {
         active: false,
         start: '-100px',
@@ -56,7 +72,6 @@ export default () => ({
         start: 25,
         end: 0,
         duration: 0.3,
-        repeat: false,
         ease: 'circ.inOut',
     },
 
@@ -171,6 +186,39 @@ export default () => ({
                 'start',
             )
         }
+
+        if (this.scaleX.active) {
+            animation.fromTo(
+                this.element,
+                {
+                    scale: this.scaleX.start,
+                },
+                {
+                    scale: this.scaleX.end,
+                    duration: this.scaleX.duration,
+                    stagger: this.stagger,
+                    ease: this.scaleX.ease,
+                },
+                'start',
+            )
+        }
+
+        if (this.scaleY.active) {
+            animation.fromTo(
+                this.element,
+                {
+                    scale: this.scaleY.start,
+                },
+                {
+                    scale: this.scaleY.end,
+                    duration: this.scaleY.duration,
+                    stagger: this.stagger,
+                    ease: this.scaleY.ease,
+                },
+                'start',
+            )
+        }
+
 
         if (this.x.active) {
             animation.fromTo(
