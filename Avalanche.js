@@ -10,7 +10,6 @@ export default () => {
     Alpine.data('draw', draw)
     Alpine.data('magnetic', magnetic)
     Alpine.data('revealer', revealer)
-    Alpine.store('isTouch', 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/))
 
     window.avalanche = {
         loaded: false,
@@ -59,6 +58,10 @@ export default () => {
 
             top = Math.round(top)
             return top >= 0 && top <= (window.innerHeight || document.documentElement.clientHeight)
+        },
+
+        isTouch() {
+            return 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/)
         },
 
         error: {
