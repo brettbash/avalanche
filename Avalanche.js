@@ -33,7 +33,7 @@ export default () => {
             words: {},
         },
 
-        isTouch: 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/)
+        isTouch: 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/),
 
         breakpoint(width, type = 'min', dimension = 'width') {
             if (type === 'max') {
