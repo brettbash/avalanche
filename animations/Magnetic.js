@@ -8,7 +8,7 @@ export default (force = 25) => ({
     },
 
     magnetize(ev, item, element, force) {
-        if (avalanche.isTouch()) {
+        if ($store.isTouch()) {
             return
         }
         const boundingRect = item.getBoundingClientRect()
@@ -29,7 +29,7 @@ export default (force = 25) => ({
     },
 
     demagnetize(element) {
-        if (avalanche.isTouch()) {
+        if ($store.isTouch()) {
             return
         }
         gsap.to(element, {

@@ -10,6 +10,7 @@ export default () => {
     Alpine.data('draw', draw)
     Alpine.data('magnetic', magnetic)
     Alpine.data('revealer', revealer)
+    Alpine.store('isTouch', 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/))
 
     window.avalanche = {
         loaded: false,
@@ -32,8 +33,6 @@ export default () => {
             lines: {},
             words: {},
         },
-
-        isTouch: 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/),
 
         breakpoint(width, type = 'min', dimension = 'width') {
             if (type === 'max') {
