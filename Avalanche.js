@@ -33,6 +33,8 @@ export default () => {
             words: {},
         },
 
+        isTouch: 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/)
+
         breakpoint(width, type = 'min', dimension = 'width') {
             if (type === 'max') {
                 width--
@@ -58,10 +60,6 @@ export default () => {
 
             top = Math.round(top)
             return top >= 0 && top <= (window.innerHeight || document.documentElement.clientHeight)
-        },
-
-        isTouch() {
-            return 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/)
         },
 
         error: {
