@@ -95,6 +95,8 @@ export default () => ({
             this.element = this.$refs.element
         }
 
+        gsap.set(this.element, { autoAlpha: 0 })
+
         if (!this.trigger && this.scrollTrigger) {
             if (!this.$refs.container) {
                 avalanche.error.trigger('AnimateText')
@@ -150,6 +152,8 @@ export default () => ({
         } else if (this.type === 'chars') {
             this.text = split.chars
         }
+
+        gsap.set(this.element, { autoAlpha: 1 })
 
         animation.addLabel('start')
 

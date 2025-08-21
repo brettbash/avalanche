@@ -219,7 +219,6 @@ export default () => ({
             )
         }
 
-
         if (this.x.active) {
             animation.fromTo(
                 this.element,
