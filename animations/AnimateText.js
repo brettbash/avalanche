@@ -26,6 +26,22 @@ export default () => ({
         ease: 'circ.inOut',
     },
 
+    scaleX: {
+        active: false,
+        start: 1.1,
+        end: 1,
+        duration: 0.3,
+        ease: 'circ.inOut',
+    },
+
+    scaleY: {
+        active: false,
+        start: 1.1,
+        end: 1,
+        duration: 0.3,
+        ease: 'circ.inOut',
+    },
+
     xPercent: {
         active: false,
         start: -25,
@@ -206,6 +222,36 @@ export default () => ({
             )
         }
 
+        if (this.scaleX.active) {
+            animation.fromTo(
+                this.text,
+                {
+                    scaleX: this.scaleX.start,
+                },
+                {
+                    scaleX: this.scaleX.end,
+                    duration: this.scaleX.duration,
+                    ease: this.scaleX.ease,
+                },
+                'start',
+            )
+        }
+
+        if (this.scaleY.active) {
+            animation.fromTo(
+                this.text,
+                {
+                    scaleY: this.scaleY.start,
+                },
+                {
+                    scaleY: this.scaleY.end,
+                    duration: this.scaleY.duration,
+                    ease: this.scaleY.ease,
+                },
+                'start',
+            )
+        }
+
         if (this.xPercent.active) {
             animation.fromTo(
                 this.text,
@@ -294,13 +340,6 @@ export default () => ({
     },
 
     setTrigger(container) {
-        this.container = container
-
-        if (avalanche.inView(container)) {
-            this.scrollTrigger = true
-            this.delay = avalanche.delay.enter
-        } else {
-            this.delay = avalanche.delay.default
-        }
+        avalanche.setTrigger(container, this)
     },
 })

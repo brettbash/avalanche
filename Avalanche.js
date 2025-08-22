@@ -60,6 +60,21 @@ export default () => {
             return top >= 0 && top <= (window.innerHeight || document.documentElement.clientHeight)
         },
 
+        // make the setTrigger method used in the other files globally available here as a utility
+        setTrigger(container, component) {
+            component.trigger = container
+
+            if (avalanche.inView(container)) {
+                component.scrollTrigger = false
+                component.delay = avalanche.delay.enter
+            } else {
+                component.scrollTrigger = true
+                component.delay = avalanche.delay.default
+            }
+        },
+
+        // simple mobile device detection
+
         isTouch() {
             return 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/)
         },

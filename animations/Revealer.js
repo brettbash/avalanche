@@ -102,13 +102,6 @@ export default () => ({
     },
 
     setTrigger(container) {
-        this.trigger = container
-
-        if (avalanche.inView(container)) {
-            this.scrollTrigger = true
-            this.delay = avalanche.delay.enter
-        } else {
-            this.delay = avalanche.delay.default
-        }
+        avalanche.setTrigger(container, this)
     },
 })
