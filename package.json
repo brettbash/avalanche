@@ -1,6 +1,6 @@
 {
     "name": "avalanchejs",
-    "version": "1.0.12",
+    "version": "1.0.13",
     "description": "Alpine utility animations built with GreenSock",
     "main": "Avalanche.js",
     "module": "Avalanche.js",

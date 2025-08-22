@@ -57,6 +57,11 @@ export default () => {
             }
 
             top = Math.round(top)
+            // only items at the very top of the screen to adjust
+            // incase it's returning a negative value caused by a -mb-px class to prevent hairline gaps
+            if (top < 10) {
+                top = top + 10
+            }
             return top >= 0 && top <= (window.innerHeight || document.documentElement.clientHeight)
         },
 
