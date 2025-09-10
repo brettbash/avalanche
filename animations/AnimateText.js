@@ -31,6 +31,7 @@ export default () => ({
         start: 1.1,
         end: 1,
         duration: 0.3,
+        stagger: null,
         ease: 'circ.inOut',
     },
 
@@ -39,14 +40,6 @@ export default () => ({
         start: 1.1,
         end: 1,
         duration: 0.3,
-        ease: 'circ.inOut',
-    },
-
-    xPercent: {
-        active: false,
-        start: -25,
-        end: 0,
-        duration: 0.3,
         stagger: null,
         ease: 'circ.inOut',
     },
@@ -54,6 +47,24 @@ export default () => ({
     x: {
         active: false,
         start: '-100px',
+        end: 0,
+        duration: 0.3,
+        stagger: null,
+        ease: 'circ.inOut',
+    },
+
+    y: {
+        active: false,
+        start: '100px',
+        end: 0,
+        duration: 0.3,
+        stagger: null,
+        ease: 'circ.inOut',
+    },
+
+    xPercent: {
+        active: false,
+        start: -25,
         end: 0,
         duration: 0.3,
         stagger: null,
@@ -69,17 +80,8 @@ export default () => ({
         ease: 'circ.inOut',
     },
 
-    y: {
-        active: false,
-        start: '100px',
-        end: 0,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
     type: 'words',
-    linesClass: 'overflow-hidden',
+    linesClass: '',
     wordsClass: '',
     charsClass: '',
 
@@ -98,9 +100,6 @@ export default () => ({
     trigger: null,
     markers: false,
 
-    // π ----
-    // :: SETUP ---------------------------::
-    // ____
     mounted() {
         if (!this.element) {
             if (!this.$refs.element) {
@@ -133,6 +132,7 @@ export default () => ({
             }
         }
 
+        this.splitText.autoSplit = true
         if (this.type === 'lines') {
             this.splitText.type = this.type
         } else if (this.type === 'words') {
@@ -144,177 +144,50 @@ export default () => ({
 
         this.splitText.linesClass = this.linesClass
         if (this.type !== 'lines') {
+            this.splitText.mask = 'lines'
             this.splitText.wordsClass = this.wordsClass
         }
 
         this.animate()
     },
 
-    // π ----
-    // :: ANIMATE ---------------------------::
-    // ____
     animate() {
-        const animation = gsap.timeline({
-            delay: this.delay,
-            scrollTrigger: this.scrollSettings,
+        const split = SplitText.create(this.element, {
+            ...this.splitText,
+            onSplit: self => {
+                const tl = gsap.timeline({
+                    delay: this.delay,
+                    scrollTrigger: this.scrollSettings,
+                })
+
+                if (this.type === 'lines') {
+                    this.text = self.lines
+                } else if (this.type === 'words') {
+                    this.text = self.words
+                } else if (this.type === 'chars') {
+                    this.text = self.chars
+                }
+
+                gsap.set(this.element, { autoAlpha: 1 })
+
+                tl.addLabel('start')
+
+                const animations = [
+                    this.opacity,
+                    this.rotation,
+                    this.scale,
+                    this.scaleX,
+                    this.scaleY,
+                    this.x,
+                    this.y,
+                    this.xPercent,
+                    this.yPercent,
+                ]
+                animations.forEach(animation => {
+                    this.set(animation, tl)
+                })
+            },
         })
-
-        const split = new SplitText(this.element, this.splitText)
-
-        if (this.type === 'lines') {
-            this.text = split.lines
-        } else if (this.type === 'words') {
-            this.text = split.words
-        } else if (this.type === 'chars') {
-            this.text = split.chars
-        }
-
-        gsap.set(this.element, { autoAlpha: 1 })
-
-        animation.addLabel('start')
-
-        if (this.opacity.active) {
-            animation.fromTo(
-                this.text,
-                {
-                    opacity: this.opacity.start,
-                },
-                {
-                    opacity: this.opacity.end,
-                    duration: this.opacity.duration,
-                    stagger: this.opacity.stagger ?? this.stagger,
-                    ease: this.opacity.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.rotation.active) {
-            animation.fromTo(
-                this.text,
-                {
-                    rotation: this.rotation.start,
-                },
-                {
-                    rotation: this.rotation.end,
-                    duration: this.rotation.duration,
-                    repeat: this.rotation.repeat,
-                    stagger: this.rotation.stagger ?? this.stagger,
-                    ease: this.rotation.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.scale.active) {
-            animation.fromTo(
-                this.text,
-                {
-                    scale: this.scale.start,
-                },
-                {
-                    scale: this.scale.end,
-                    duration: this.scale.duration,
-                    stagger: this.scale.stagger ?? this.stagger,
-                    ease: this.scale.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.scaleX.active) {
-            animation.fromTo(
-                this.text,
-                {
-                    scaleX: this.scaleX.start,
-                },
-                {
-                    scaleX: this.scaleX.end,
-                    duration: this.scaleX.duration,
-                    ease: this.scaleX.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.scaleY.active) {
-            animation.fromTo(
-                this.text,
-                {
-                    scaleY: this.scaleY.start,
-                },
-                {
-                    scaleY: this.scaleY.end,
-                    duration: this.scaleY.duration,
-                    ease: this.scaleY.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.xPercent.active) {
-            animation.fromTo(
-                this.text,
-                {
-                    xPercent: this.xPercent.start,
-                },
-                {
-                    xPercent: this.xPercent.end,
-                    duration: this.xPercent.duration,
-                    stagger: this.xPercent.stagger ?? this.stagger,
-                    ease: this.xPercent.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.x.active) {
-            animation.fromTo(
-                this.text,
-                {
-                    x: this.x.start,
-                },
-                {
-                    x: this.x.end,
-                    duration: this.x.duration,
-                    stagger: this.x.stagger ?? this.stagger,
-                    ease: this.x.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.yPercent.active) {
-            animation.fromTo(
-                this.text,
-                {
-                    yPercent: this.yPercent.start,
-                },
-                {
-                    yPercent: this.yPercent.end,
-                    duration: this.yPercent.duration,
-                    stagger: this.yPercent.stagger ?? this.stagger,
-                    ease: this.yPercent.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.y.active) {
-            animation.fromTo(
-                this.text,
-                {
-                    y: this.y.start,
-                },
-                {
-                    y: this.y.end,
-                    duration: this.y.duration,
-                    stagger: this.y.stagger ?? this.stagger,
-                    ease: this.y.ease,
-                },
-                'start',
-            )
-        }
     },
 
     watch(item) {
@@ -341,5 +214,52 @@ export default () => ({
 
     setTrigger(container) {
         avalanche.setTrigger(container, this)
+    },
+
+    set(animation, tl) {
+        if (!animation.active) return
+        let from
+        let to
+        if (animation == this.opacity) {
+            from = { opacity: animation.start }
+            to = { opacity: animation.end }
+        } else if (animation == this.rotation) {
+            from = { rotation: animation.start }
+            to = { rotation: animation.end }
+        } else if (animation == this.scale) {
+            from = { scale: animation.start }
+            to = { scale: animation.end }
+        } else if (animation == this.scaleX) {
+            from = { scaleX: animation.start }
+            to = { scaleX: animation.end }
+        } else if (animation == this.scaleY) {
+            from = { scaleY: animation.start }
+            to = { scaleY: animation.end }
+        } else if (animation == this.x) {
+            from = { x: animation.start }
+            to = { x: animation.end }
+        } else if (animation == this.y) {
+            from = { y: animation.start }
+            to = { y: animation.end }
+        } else if (animation == this.xPercent) {
+            from = { xPercent: animation.start }
+            to = { xPercent: animation.end }
+        } else if (animation == this.yPercent) {
+            from = { yPercent: animation.start }
+            to = { yPercent: animation.end }
+        }
+
+        tl.fromTo(
+            this.text,
+            from,
+            {
+                ...to,
+                stagger: animation.stagger ?? this.stagger,
+                repeat: animation.repeat ?? 0,
+                duration: animation.duration,
+                ease: animation.ease,
+            },
+            'start',
+        )
     },
 })

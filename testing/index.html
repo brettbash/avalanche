@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Avalanche</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-100 text-gray-900">
+        <div class="min-h-screen flex flex-col">
+            <header class="bg-gray-800 text-white p-4">
+                <h1 class="text-2xl font-bold">Avalanche</h1>
+            </header>
+            <main class="flex-grow">
+                <section class="min-h-screen bg-gray-100 p-16">
+                    <p
+                        x-data="animateText()"
+                        x-init="
+                            yPercent = { 
+                                ...yPercent, active: true,
+                                start: 100,
+                            };
+                            type = 'words';
+                            setTrigger($refs.element);
+                            wordsClass = 'pb-2';
+                            delay = 1;
+                            mounted();
+                        "
+                        x-ref="element"
+                        class="text-5xl max-w-3xl mx-auto"
+                    >
+                        Blanditiis voluptatem quas vel ad ratione asperiores. Magnam distinctio porro deleniti rerum.
+                        Accusantium blanditiis maiores sapiente esse voluptates id ipsa omnis voluptates. Dignissimos
+                        officia similique.
+                    </p>
+                </section>
+                <section class="min-h-screen bg-gray-800 p-16">
+                    <div
+                        x-data="animate()"
+                        x-init=" 
+                            yPercent = { 
+                                ...yPercent, active: true,
+                            };
+                            setTrigger($refs.element);
+                            mounted();
+                        "
+                        x-ref="element"
+                        class="bg-yellow-500 w-1/4 aspect-square"
+                    ></div>
+                </section>
+            </main>
+        </div>
+    </body>
+    <script src="dist/site.js"></script>
+    <script src="dist/avalanche.js"></script>
+</html>

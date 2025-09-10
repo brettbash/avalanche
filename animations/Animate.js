@@ -4,6 +4,7 @@ export default () => ({
         start: 0,
         end: 1,
         duration: 0.3,
+        stagger: null,
         ease: 'quad.inOut',
     },
 
@@ -12,6 +13,7 @@ export default () => ({
         start: 180,
         end: 0,
         duration: 0.3,
+        stagger: null,
         repeat: false,
         ease: 'circ.inOut',
     },
@@ -21,6 +23,7 @@ export default () => ({
         start: 1.1,
         end: 1,
         duration: 0.3,
+        stagger: null,
         ease: 'circ.inOut',
     },
 
@@ -29,6 +32,7 @@ export default () => ({
         start: 1.1,
         end: 1,
         duration: 0.3,
+        stagger: null,
         ease: 'circ.inOut',
     },
 
@@ -37,6 +41,7 @@ export default () => ({
         start: 1.1,
         end: 1,
         duration: 0.3,
+        stagger: null,
         ease: 'circ.inOut',
     },
 
@@ -46,15 +51,7 @@ export default () => ({
         end: 0,
         duration: 0.3,
         repeat: false,
-        ease: 'circ.inOut',
-    },
-
-    xPercent: {
-        active: false,
-        start: -25,
-        end: 0,
-        duration: 0.3,
-        repeat: false,
+        stagger: null,
         ease: 'circ.inOut',
     },
 
@@ -64,6 +61,17 @@ export default () => ({
         end: 0,
         duration: 0.3,
         repeat: false,
+        stagger: null,
+        ease: 'circ.inOut',
+    },
+
+    xPercent: {
+        active: false,
+        start: -25,
+        end: 0,
+        duration: 0.3,
+        repeat: false,
+        stagger: null,
         ease: 'circ.inOut',
     },
 
@@ -72,6 +80,7 @@ export default () => ({
         start: 25,
         end: 0,
         duration: 0.3,
+        stagger: null,
         ease: 'circ.inOut',
     },
 
@@ -87,9 +96,6 @@ export default () => ({
     trigger: null,
     markers: false,
 
-    // π ----
-    // :: SETUP ---------------------------::
-    // ____
     mounted() {
         if (!this.element) {
             if (!this.$refs.element) {
@@ -127,165 +133,28 @@ export default () => ({
         this.animate()
     },
 
-    // π ----
-    // :: ANIMATE ---------------------------::
-    // ____
     animate() {
-        const animation = gsap.timeline({
+        const tl = gsap.timeline({
             delay: this.delay,
             scrollTrigger: this.scrollSettings,
         })
 
-        animation.addLabel('start')
+        tl.addLabel('start')
 
-        if (this.opacity.active) {
-            animation.fromTo(
-                this.element,
-                {
-                    opacity: this.opacity.start,
-                },
-                {
-                    opacity: this.opacity.end,
-                    duration: this.opacity.duration,
-                    stagger: this.stagger,
-                    ease: this.opacity.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.rotation.active) {
-            animation.fromTo(
-                this.element,
-                {
-                    rotation: this.rotation.start,
-                },
-                {
-                    rotation: this.rotation.end,
-                    duration: this.rotation.duration,
-                    repeat: this.rotation.repeat,
-                    stagger: this.stagger,
-                    ease: this.rotation.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.scale.active) {
-            animation.fromTo(
-                this.element,
-                {
-                    scale: this.scale.start,
-                },
-                {
-                    scale: this.scale.end,
-                    duration: this.scale.duration,
-                    stagger: this.stagger,
-                    ease: this.scale.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.scaleX.active) {
-            animation.fromTo(
-                this.element,
-                {
-                    scale: this.scaleX.start,
-                },
-                {
-                    scale: this.scaleX.end,
-                    duration: this.scaleX.duration,
-                    stagger: this.stagger,
-                    ease: this.scaleX.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.scaleY.active) {
-            animation.fromTo(
-                this.element,
-                {
-                    scale: this.scaleY.start,
-                },
-                {
-                    scale: this.scaleY.end,
-                    duration: this.scaleY.duration,
-                    stagger: this.stagger,
-                    ease: this.scaleY.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.x.active) {
-            animation.fromTo(
-                this.element,
-                {
-                    x: this.x.start,
-                },
-                {
-                    x: this.x.end,
-                    duration: this.x.duration,
-                    repeat: this.x.repeat,
-                    stagger: this.stagger,
-                    ease: this.x.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.xPercent.active) {
-            animation.fromTo(
-                this.element,
-                {
-                    xPercent: this.xPercent.start,
-                },
-                {
-                    xPercent: this.xPercent.end,
-                    duration: this.xPercent.duration,
-                    repeat: this.xPercent.repeat,
-                    stagger: this.stagger,
-                    ease: this.xPercent.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.y.active) {
-            animation.fromTo(
-                this.element,
-                {
-                    y: this.y.start,
-                },
-                {
-                    y: this.y.end,
-                    duration: this.y.duration,
-                    stagger: this.stagger,
-                    repeat: this.y.repeat,
-                    ease: this.y.ease,
-                },
-                'start',
-            )
-        }
-
-        if (this.yPercent.active) {
-            animation.fromTo(
-                this.element,
-                {
-                    yPercent: this.yPercent.start,
-                },
-                {
-                    yPercent: this.yPercent.end,
-                    duration: this.yPercent.duration,
-                    repeat: this.yPercent.repeat,
-                    stagger: this.stagger,
-                    ease: this.yPercent.ease,
-                },
-                'start',
-            )
-        }
+        const animations = [
+            this.opacity,
+            this.rotation,
+            this.scale,
+            this.scaleX,
+            this.scaleY,
+            this.x,
+            this.y,
+            this.xPercent,
+            this.yPercent,
+        ]
+        animations.forEach(animation => {
+            this.set(animation, tl)
+        })
     },
 
     watch(item) {
@@ -312,5 +181,52 @@ export default () => ({
 
     setTrigger(container) {
         avalanche.setTrigger(container, this)
+    },
+
+    set(animation, tl) {
+        if (!animation.active) return
+        let from
+        let to
+        if (animation == this.opacity) {
+            from = { opacity: animation.start }
+            to = { opacity: animation.end }
+        } else if (animation == this.rotation) {
+            from = { rotation: animation.start }
+            to = { rotation: animation.end }
+        } else if (animation == this.scale) {
+            from = { scale: animation.start }
+            to = { scale: animation.end }
+        } else if (animation == this.scaleX) {
+            from = { scaleX: animation.start }
+            to = { scaleX: animation.end }
+        } else if (animation == this.scaleY) {
+            from = { scaleY: animation.start }
+            to = { scaleY: animation.end }
+        } else if (animation == this.x) {
+            from = { x: animation.start }
+            to = { x: animation.end }
+        } else if (animation == this.y) {
+            from = { y: animation.start }
+            to = { y: animation.end }
+        } else if (animation == this.xPercent) {
+            from = { xPercent: animation.start }
+            to = { xPercent: animation.end }
+        } else if (animation == this.yPercent) {
+            from = { yPercent: animation.start }
+            to = { yPercent: animation.end }
+        }
+
+        tl.fromTo(
+            this.element,
+            from,
+            {
+                ...to,
+                stagger: animation.stagger ?? this.stagger,
+                repeat: animation.repeat ?? 0,
+                duration: animation.duration,
+                ease: animation.ease,
+            },
+            'start',
+        )
     },
 })

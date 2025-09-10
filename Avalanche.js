@@ -46,14 +46,14 @@ export default () => {
                 return
             }
             const rect = el.getBoundingClientRect()
-            let top
+            let top = rect.top
 
-            if (Alpine.store('barba').started && Alpine.store('barba').currentHeight) {
-                const pageScrolled = window.scrollY
-                const offset = Alpine.store('barba').currentHeight - pageScrolled
-                top = rect.top - offset
-            } else {
-                top = rect.top
+            if (Alpine.store('barba')) {
+                if (Alpine.store('barba').started && Alpine.store('barba').currentHeight) {
+                    const pageScrolled = window.scrollY
+                    const offset = Alpine.store('barba').currentHeight - pageScrolled
+                    top = rect.top - offset
+                }
             }
 
             top = Math.round(top)
@@ -79,7 +79,6 @@ export default () => {
         },
 
         // simple mobile device detection
-
         isTouch() {
             return 'ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/)
         },
