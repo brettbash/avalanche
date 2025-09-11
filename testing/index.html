@@ -16,13 +16,8 @@
                     <p
                         x-data="animateText()"
                         x-init="
-                            yPercent = { 
-                                ...yPercent, active: true,
-                                start: 100,
-                            };
-                            type = 'words';
+                            preset('paragraph');
                             setTrigger($refs.element);
-                            wordsClass = 'pb-2';
                             delay = 1;
                             mounted();
                         "
@@ -34,23 +29,68 @@
                         officia similique.
                     </p>
                 </section>
-                <section class="min-h-screen bg-gray-800 p-16">
+
+                <section
+                    x-data
+                    x-ref="container"
+                    class="flex justify-center items-center min-h-screen bg-gray-800 p-16"
+                >
                     <div
                         x-data="animate()"
                         x-init=" 
-                            yPercent = { 
-                                ...yPercent, active: true,
-                            };
-                            setTrigger($refs.element);
+                            yPercent = [25, 0];
+                            opacity = [0, 1];
+                            skewX = [30, 0];
+                            setTrigger($refs.container);
                             mounted();
                         "
                         x-ref="element"
                         class="bg-yellow-500 w-1/4 aspect-square"
                     ></div>
                 </section>
+
+                <section
+                    x-data
+                    x-ref="container"
+                    class="flex justify-center items-center min-h-screen bg-gray-800 p-16"
+                >
+                    <div
+                        x-data="animate()"
+                        x-init=" 
+                            preset('fadeInUp');
+                            setTrigger($refs.container);
+                            mounted();
+                        "
+                        x-ref="element"
+                        class="bg-orange-500 w-1/4 aspect-square"
+                    ></div>
+                </section>
+
+                <section class="flex justify-center items-center min-h-screen bg-gray-800 p-16">
+                    <div
+                        x-data="revealer()"
+                        x-init=" 
+                            xPercent = [101, -101];
+                            elm.animations = { opacity: [0, 1], scale: [1.8, 1], xPercent: [-25, 0] };
+                            elm.delay = 0.1;
+                            setTrigger($refs.container);
+                            mounted();
+                        "
+                        x-ref="container"
+                        class="relative w-1/4 aspect-square overflow-hidden"
+                    >
+                        <div x-ref="element" class="absolute inset-0 bg-blue-500">
+                            <img
+                                src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+                                class="w-full h-full object-cover"
+                            />
+                        </div>
+                        <div x-ref="cover" class="absolute inset-0 bg-purple-500"></div>
+                        <div x-ref="curtain" class="absolute inset-0 bg-purple-800"></div>
+                    </div>
+                </section>
             </main>
         </div>
     </body>
     <script src="dist/site.js"></script>
-    <script src="dist/avalanche.js"></script>
 </html>

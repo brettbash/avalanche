@@ -1,117 +1,51 @@
 export default () => ({
-    opacity: {
-        active: true,
-        start: 0,
-        end: 1,
-        duration: 0.3,
-        stagger: null,
-        ease: 'quad.inOut',
-    },
+    // property: [from, to, { duration, delay, stagger, repeat, ease }],
+    // y: [100, 0, { duration: 0.3, delay: 0.1, stagger: 0.1, repeat: -1, ease: 'circ.inOut' }],
+    opacity: null,
+    rotation: null,
+    scale: null,
+    scaleX: null,
+    scaleY: null,
+    skew: null,
+    skewX: null,
+    skewY: null,
+    x: null,
+    y: null,
+    xPercent: null,
+    yPercent: null,
+    animations: null,
 
-    rotation: {
-        active: false,
-        start: 180,
-        end: 0,
-        duration: 0.3,
-        stagger: null,
-        repeat: false,
-        ease: 'circ.inOut',
-    },
+    element: null,
 
-    scale: {
-        active: false,
-        start: 1.1,
-        end: 1,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    scaleX: {
-        active: false,
-        start: 1.1,
-        end: 1,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    scaleY: {
-        active: false,
-        start: 1.1,
-        end: 1,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    x: {
-        active: false,
-        start: '-100px',
-        end: 0,
-        duration: 0.3,
-        repeat: false,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    y: {
-        active: false,
-        start: '100px',
-        end: 0,
-        duration: 0.3,
-        repeat: false,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    xPercent: {
-        active: false,
-        start: -25,
-        end: 0,
-        duration: 0.3,
-        repeat: false,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    yPercent: {
-        active: false,
-        start: 25,
-        end: 0,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
+    duration: 0.3,
+    ease: 'quad.inOut',
     delay: false,
+    repeat: 0,
+
     scrollTrigger: true,
     scrollSettings: false,
+    trigger: null,
     start: 'top 85%',
     end: 'bottom top',
     toggleActions: 'play none play none',
     scrub: false,
     stagger: false,
-    element: null,
-    trigger: null,
     markers: false,
 
     mounted() {
         if (!this.element) {
             if (!this.$refs.element) {
-                avalanche.error.element('Animate')
+                Avalanche.error.element('Animate')
                 return
             }
-
             this.element = this.$refs.element
         }
 
         if (!this.trigger && this.scrollTrigger) {
             if (!this.$refs.element) {
-                avalanche.error.trigger('Animate')
+                Avalanche.error.trigger('Animate')
                 return
             }
-
             this.trigger = this.$refs.element
         }
 
@@ -127,7 +61,22 @@ export default () => ({
         }
 
         if (!this.delay) {
-            this.delay = avalanche.delay.default
+            this.delay = Avalanche.delay.default
+        }
+
+        this.animations = {
+            opacity: this.opacity,
+            rotation: this.rotation,
+            scale: this.scale,
+            scaleX: this.scaleX,
+            scaleY: this.scaleY,
+            skew: this.skew,
+            skewX: this.skewX,
+            skewY: this.skewY,
+            x: this.x,
+            y: this.y,
+            xPercent: this.xPercent,
+            yPercent: this.yPercent,
         }
 
         this.animate()
@@ -138,22 +87,11 @@ export default () => ({
             delay: this.delay,
             scrollTrigger: this.scrollSettings,
         })
-
         tl.addLabel('start')
-
-        const animations = [
-            this.opacity,
-            this.rotation,
-            this.scale,
-            this.scaleX,
-            this.scaleY,
-            this.x,
-            this.y,
-            this.xPercent,
-            this.yPercent,
-        ]
-        animations.forEach(animation => {
-            this.set(animation, tl)
+        Object.keys(this.animations).forEach(key => {
+            if (this.animations[key]) {
+                this.set(this.animations[key], tl)
+            }
         })
     },
 
@@ -164,69 +102,50 @@ export default () => ({
     },
 
     active() {
-        opacity = {
-            ...opacity,
-            start: 0,
-            end: 1,
-        }
+        opacity = [0, 1]
     },
 
     inactive() {
-        opacity = {
-            ...opacity,
-            start: 1,
-            end: 0,
-        }
+        opacity = [1, 0]
     },
 
     setTrigger(container) {
-        avalanche.setTrigger(container, this)
+        Avalanche.setTrigger(container, this)
+    },
+
+    preset(animation) {
+        const preset = Alpine.store('avalanche').animate[animation]
+        if (preset) {
+            Object.keys(preset).forEach(key => {
+                this[key] = preset[key]
+            })
+        }
     },
 
     set(animation, tl) {
-        if (!animation.active) return
+        if (!animation) return
         let from
         let to
-        if (animation == this.opacity) {
-            from = { opacity: animation.start }
-            to = { opacity: animation.end }
-        } else if (animation == this.rotation) {
-            from = { rotation: animation.start }
-            to = { rotation: animation.end }
-        } else if (animation == this.scale) {
-            from = { scale: animation.start }
-            to = { scale: animation.end }
-        } else if (animation == this.scaleX) {
-            from = { scaleX: animation.start }
-            to = { scaleX: animation.end }
-        } else if (animation == this.scaleY) {
-            from = { scaleY: animation.start }
-            to = { scaleY: animation.end }
-        } else if (animation == this.x) {
-            from = { x: animation.start }
-            to = { x: animation.end }
-        } else if (animation == this.y) {
-            from = { y: animation.start }
-            to = { y: animation.end }
-        } else if (animation == this.xPercent) {
-            from = { xPercent: animation.start }
-            to = { xPercent: animation.end }
-        } else if (animation == this.yPercent) {
-            from = { yPercent: animation.start }
-            to = { yPercent: animation.end }
+        const property = [...Object.keys(this.animations)].find(key => animation == this.animations[key])
+        if (property) {
+            from = { [property]: animation[0] }
+            to = { [property]: animation[1] }
+        } else {
+            return
         }
-
+        const options = animation[2] || {}
         tl.fromTo(
             this.element,
             from,
             {
                 ...to,
-                stagger: animation.stagger ?? this.stagger,
-                repeat: animation.repeat ?? 0,
-                duration: animation.duration,
-                ease: animation.ease,
+                duration: options.duration ?? this.duration,
+                stagger: options.stagger ?? this.stagger,
+                repeat: options.repeat ?? this.repeat,
+                ease: options.ease ?? this.ease,
+                transformOrigin: options.transformOrigin ?? 'center center',
             },
-            'start',
+            `start+=${options.delay ?? 0}`,
         )
     },
 })

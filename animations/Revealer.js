@@ -1,33 +1,58 @@
 export default () => ({
-    xPercent: {
-        start: -101,
-        end: 101,
+    opacity: null,
+    rotation: null,
+    scale: null,
+    scaleX: null,
+    scaleY: null,
+    skew: null,
+    skewX: null,
+    skewY: null,
+    x: null,
+    y: null,
+    xPercent: null,
+    yPercent: null,
+    animations: null,
+    elm: {
+        animations: {
+            opacity: null,
+            rotation: null,
+            scale: null,
+            scaleX: null,
+            scaleY: null,
+            skew: null,
+            skewX: null,
+            skewY: null,
+            x: null,
+            y: null,
+            xPercent: null,
+            yPercent: null,
+        },
+        duration: 0.3,
+        ease: 'quad.inOut',
+        delay: 0,
     },
 
-    yPercent: {
-        start: 0,
-        end: 0,
-    },
+    element: null,
 
     duration: 0.55,
     ease: 'expo.inOut',
-    delay: false,
+    delay: 0,
+    repeat: 0,
+
     scrollTrigger: true,
     scrollSettings: false,
+    trigger: null,
     start: 'top 85%',
     end: 'bottom top',
     toggleActions: 'play none play none',
-    element: null,
-    trigger: null,
+    scrub: false,
+    stagger: false,
     markers: false,
 
-    // π ----
-    // :: SETUP ---------------------------::
-    // ____
     mounted() {
         if (!this.element) {
             if (!this.$refs.element) {
-                avalanche.error.element('Animate')
+                Avalanche.error.element('Animate')
                 return
             }
 
@@ -36,7 +61,7 @@ export default () => ({
 
         if (!this.trigger && this.scrollTrigger) {
             if (!this.$refs.element) {
-                avalanche.error.trigger('Animate')
+                Avalanche.error.trigger('Animate')
                 return
             }
 
@@ -54,31 +79,58 @@ export default () => ({
         }
 
         if (!this.delay) {
-            this.delay = avalanche.delay.default
+            this.delay = Avalanche.delay.default
         }
 
+        this.animations = {
+            opacity: this.opacity,
+            rotation: this.rotation,
+            scale: this.scale,
+            scaleX: this.scaleX,
+            scaleY: this.scaleY,
+            x: this.x,
+            y: this.y,
+            xPercent: this.xPercent,
+            yPercent: this.yPercent,
+        }
         this.animate()
     },
 
     animate() {
-        const animation = gsap.timeline({
+        const tl = gsap.timeline({
             delay: this.delay,
             scrollTrigger: this.scrollSettings,
         })
 
         gsap.set(this.element, { opacity: 0 })
 
-        animation.addLabel('start')
+        tl.addLabel('start')
 
-        animation.fromTo(
+        let from = {}
+        let pause = {}
+        let to = {}
+        Object.keys(this.animations).forEach(key => {
+            if (this.animations[key]) {
+                from = { ...from, [key]: this.animations[key][0] }
+                pause = { ...pause, [key]: key === 'opacity' ? 0 : 1 }
+                to = { ...to, [key]: this.animations[key][1] }
+            }
+        })
+
+        let elementTo = {}
+        let elementFrom = {}
+        Object.keys(this.elm.animations).forEach(key => {
+            if (this.elm.animations[key]) {
+                elementFrom = { ...elementFrom, [key]: this.elm.animations[key][0] }
+                elementTo = { ...elementTo, [key]: this.elm.animations[key][1] }
+            }
+        })
+
+        tl.fromTo(
             this.$refs.curtain,
+            from,
             {
-                xPercent: this.xPercent.start,
-                yPercent: this.yPercent.start,
-            },
-            {
-                xPercent: 0,
-                yPercent: 0,
+                ...pause,
                 duration: this.duration,
                 ease: this.ease,
             },
@@ -86,22 +138,60 @@ export default () => ({
         )
 
         if (this.$refs.cover) {
-            animation.set(this.$refs.cover, { opacity: 0 })
+            tl.set(this.$refs.cover, { opacity: 0 })
         }
 
-        animation.set(this.element, { opacity: 1 }).to(this.$refs.curtain, {
-            xPercent: this.xPercent.end,
-            yPercent: this.yPercent.end,
-            duration: this.duration,
-            ease: this.ease,
-        })
+        tl.set(this.element, elementFrom)
+        tl.addLabel('element')
+        tl.to(
+            this.$refs.element,
+            {
+                ...elementTo,
+                duration: this.elm.duration,
+                ease: this.elm.ease,
+            },
+            `element+=${this.elm.delay ?? 0}`,
+        )
+
+        tl.to(
+            this.$refs.curtain,
+            {
+                ...to,
+                duration: this.duration,
+                ease: this.ease,
+            },
+            'element',
+        )
 
         if (this.$refs.curtainWrapper) {
-            animation.to(this.$refs.curtainWrapper, { autoAlpha: 0, duration: 0.2 })
+            tl.to(this.$refs.curtainWrapper, { autoAlpha: 0, duration: 0.2 })
         }
     },
 
+    watch(item) {
+        this.$watch(item, value => {
+            value ? this.active() : this.inactive()
+        })
+    },
+
+    active() {
+        opacity = [0, 1]
+    },
+
+    inactive() {
+        opacity = [1, 0]
+    },
+
     setTrigger(container) {
-        avalanche.setTrigger(container, this)
+        Avalanche.setTrigger(container, this)
+    },
+
+    preset(animation) {
+        const preset = Alpine.store('avalanche').revealer[animation]
+        if (preset) {
+            Object.keys(preset).forEach(key => {
+                this[key] = preset[key]
+            })
+        }
     },
 })

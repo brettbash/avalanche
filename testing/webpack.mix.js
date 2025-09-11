@@ -15,7 +15,7 @@ mix.js('./site.js', './dist/site.js')
 mix.options({ cssNano: { minifyFontValues: false } })
 
 mix.browserSync({
-    proxy: 'http://avalanche.test',
+    proxy: 'http://Avalanche.test',
     files: ['**/*.html', '**/*.(css|js)'],
     // Option to open in non default OS browser.
     // browser: "firefox",

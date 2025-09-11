@@ -20,4 +20,21 @@ Alpine.store('barba', {
 })
 
 Avalanche()
+// Set Project Wide Defaults
+Alpine.store('avalanche', {
+    animate: {
+        fadeInUp: {
+            opacity: [0, 1],
+            yPercent: [25, 0],
+        },
+    },
+    animateText: {
+        paragraph: {
+            yPercent: [100, 0],
+            type: 'words',
+            wordsClass: 'pb-2',
+        },
+    },
+})
+
 Alpine.start()

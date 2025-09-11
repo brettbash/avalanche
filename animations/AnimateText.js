@@ -1,109 +1,45 @@
 export default () => ({
-    opacity: {
-        active: true,
-        start: 0,
-        end: 1,
-        duration: 0.3,
-        stagger: null,
-        ease: 'quad.inOut',
-    },
+    opacity: null,
+    rotation: null,
+    scale: null,
+    scaleX: null,
+    scaleY: null,
+    skew: null,
+    skewX: null,
+    skewY: null,
+    x: null,
+    y: null,
+    xPercent: null,
+    yPercent: null,
+    animations: null,
 
-    rotation: {
-        active: false,
-        start: -45,
-        end: 0,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    scale: {
-        active: false,
-        start: 0,
-        end: 1,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    scaleX: {
-        active: false,
-        start: 1.1,
-        end: 1,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    scaleY: {
-        active: false,
-        start: 1.1,
-        end: 1,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    x: {
-        active: false,
-        start: '-100px',
-        end: 0,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    y: {
-        active: false,
-        start: '100px',
-        end: 0,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    xPercent: {
-        active: false,
-        start: -25,
-        end: 0,
-        duration: 0.3,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
-    yPercent: {
-        active: false,
-        start: 25,
-        end: 0,
-        duration: 0.8,
-        stagger: null,
-        ease: 'circ.inOut',
-    },
-
+    element: null,
+    text: null,
+    splitText: {},
     type: 'words',
     linesClass: '',
     wordsClass: '',
     charsClass: '',
 
-    splitText: {},
-
-    stagger: 0.06,
+    duration: 0.3,
+    ease: 'quad.inOut',
     delay: false,
+    repeat: 0,
+
     scrollTrigger: true,
     scrollSettings: false,
+    trigger: null,
     start: 'top 85%',
     end: 'bottom top',
     toggleActions: 'play none play none',
     scrub: false,
-    element: null,
-    text: null,
-    trigger: null,
+    stagger: 0.06,
     markers: false,
 
     mounted() {
         if (!this.element) {
             if (!this.$refs.element) {
-                avalanche.error.element('AnimateText')
+                Avalanche.error.element('AnimateText')
                 return
             }
 
@@ -114,7 +50,7 @@ export default () => ({
 
         if (!this.trigger && this.scrollTrigger) {
             if (!this.$refs.container) {
-                avalanche.error.trigger('AnimateText')
+                Avalanche.error.trigger('AnimateText')
                 return
             }
 
@@ -148,6 +84,21 @@ export default () => ({
             this.splitText.wordsClass = this.wordsClass
         }
 
+        this.animations = {
+            opacity: this.opacity,
+            rotation: this.rotation,
+            scale: this.scale,
+            scaleX: this.scaleX,
+            scaleY: this.scaleY,
+            skew: this.skew,
+            skewX: this.skewX,
+            skewY: this.skewY,
+            x: this.x,
+            y: this.y,
+            xPercent: this.xPercent,
+            yPercent: this.yPercent,
+        }
+
         this.animate()
     },
 
@@ -159,7 +110,6 @@ export default () => ({
                     delay: this.delay,
                     scrollTrigger: this.scrollSettings,
                 })
-
                 if (this.type === 'lines') {
                     this.text = self.lines
                 } else if (this.type === 'words') {
@@ -167,24 +117,12 @@ export default () => ({
                 } else if (this.type === 'chars') {
                     this.text = self.chars
                 }
-
                 gsap.set(this.element, { autoAlpha: 1 })
-
                 tl.addLabel('start')
-
-                const animations = [
-                    this.opacity,
-                    this.rotation,
-                    this.scale,
-                    this.scaleX,
-                    this.scaleY,
-                    this.x,
-                    this.y,
-                    this.xPercent,
-                    this.yPercent,
-                ]
-                animations.forEach(animation => {
-                    this.set(animation, tl)
+                Object.keys(this.animations).forEach(key => {
+                    if (this.animations[key]) {
+                        this.set(this.animations[key], tl)
+                    }
                 })
             },
         })
@@ -197,69 +135,50 @@ export default () => ({
     },
 
     active() {
-        opacity = {
-            ...opacity,
-            start: 0,
-            end: 1,
-        }
+        opacity = [0, 1]
     },
 
     inactive() {
-        opacity = {
-            ...opacity,
-            start: 1,
-            end: 0,
-        }
+        opacity = [1, 0]
     },
 
     setTrigger(container) {
-        avalanche.setTrigger(container, this)
+        Avalanche.setTrigger(container, this)
+    },
+
+    preset(animation) {
+        const preset = Alpine.store('avalanche').animateText[animation]
+        if (preset) {
+            Object.keys(preset).forEach(key => {
+                this[key] = preset[key]
+            })
+        }
     },
 
     set(animation, tl) {
-        if (!animation.active) return
+        if (!animation) return
         let from
         let to
-        if (animation == this.opacity) {
-            from = { opacity: animation.start }
-            to = { opacity: animation.end }
-        } else if (animation == this.rotation) {
-            from = { rotation: animation.start }
-            to = { rotation: animation.end }
-        } else if (animation == this.scale) {
-            from = { scale: animation.start }
-            to = { scale: animation.end }
-        } else if (animation == this.scaleX) {
-            from = { scaleX: animation.start }
-            to = { scaleX: animation.end }
-        } else if (animation == this.scaleY) {
-            from = { scaleY: animation.start }
-            to = { scaleY: animation.end }
-        } else if (animation == this.x) {
-            from = { x: animation.start }
-            to = { x: animation.end }
-        } else if (animation == this.y) {
-            from = { y: animation.start }
-            to = { y: animation.end }
-        } else if (animation == this.xPercent) {
-            from = { xPercent: animation.start }
-            to = { xPercent: animation.end }
-        } else if (animation == this.yPercent) {
-            from = { yPercent: animation.start }
-            to = { yPercent: animation.end }
+        const property = [...Object.keys(this.animations)].find(key => animation == this.animations[key])
+        if (property) {
+            from = { [property]: animation[0] }
+            to = { [property]: animation[1] }
+        } else {
+            return
         }
-
+        const options = animation[2] || {}
         tl.fromTo(
             this.text,
             from,
             {
                 ...to,
-                stagger: animation.stagger ?? this.stagger,
-                repeat: animation.repeat ?? 0,
-                duration: animation.duration,
-                ease: animation.ease,
+                duration: options.duration ?? this.duration,
+                stagger: options.stagger ?? this.stagger,
+                repeat: options.repeat ?? this.repeat,
+                ease: options.ease ?? this.ease,
+                transformOrigin: options.transformOrigin ?? 'center center',
             },
-            'start',
+            `start+=${options.delay ?? 0}`,
         )
     },
 })

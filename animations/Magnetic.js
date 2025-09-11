@@ -8,7 +8,7 @@ export default (force = 25) => ({
     },
 
     magnetize(ev, item, element, force) {
-        if (avalanche.isTouch()) {
+        if (Avalanche.isTouch()) {
             return
         }
         const boundingRect = item.getBoundingClientRect()
@@ -29,7 +29,7 @@ export default (force = 25) => ({
     },
 
     demagnetize(element) {
-        if (avalanche.isTouch()) {
+        if (Avalanche.isTouch()) {
             return
         }
         gsap.to(element, {
@@ -37,5 +37,14 @@ export default (force = 25) => ({
             y: 0,
             duration: this.duration,
         })
+    },
+
+    preset(animation) {
+        const preset = Alpine.store('avalanche').manetic[animation]
+        if (preset) {
+            Object.keys(preset).forEach(key => {
+                this[key] = preset[key]
+            })
+        }
     },
 })

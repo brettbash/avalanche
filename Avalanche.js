@@ -1,8 +1,8 @@
-import animate from './animations/Animate.js'
-import animateText from './animations/AnimateText.js'
-import draw from './animations/Draw.js'
-import magnetic from './animations/Magnetic.js'
-import revealer from './animations/Revealer.js'
+import animate from './animations/Animate'
+import animateText from './animations/AnimateText'
+import draw from './animations/Draw'
+import magnetic from './animations/Magnetic'
+import revealer from './animations/Revealer'
 
 export default () => {
     Alpine.data('animate', animate)
@@ -11,7 +11,7 @@ export default () => {
     Alpine.data('magnetic', magnetic)
     Alpine.data('revealer', revealer)
 
-    window.avalanche = {
+    window.Avalanche = {
         loaded: false,
         delay: {
             default: 0.25,
@@ -42,7 +42,7 @@ export default () => {
 
         inView(el) {
             if (!el) {
-                avalanche.error.inView()
+                Avalanche.error.inView()
                 return
             }
             const rect = el.getBoundingClientRect()
@@ -69,12 +69,12 @@ export default () => {
         setTrigger(container, component) {
             component.trigger = container
 
-            if (avalanche.inView(container)) {
+            if (Avalanche.inView(container)) {
                 component.scrollTrigger = false
-                component.delay = avalanche.delay.enter
+                component.delay = Avalanche.delay.enter
             } else {
                 component.scrollTrigger = true
-                component.delay = avalanche.delay.default
+                component.delay = Avalanche.delay.default
             }
         },
 
@@ -84,7 +84,7 @@ export default () => {
         },
 
         error: {
-            root: '🏔️AVALANCHE ERROR 🚨: ',
+            root: '🏔️Avalanche ERROR 🚨: ',
             inView() {
                 console.error(`${this.root} inView is missing an triggger! 😱`)
             },
